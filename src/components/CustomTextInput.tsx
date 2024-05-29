@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { StyleSheet, View, TextInput } from "react-native"
+import { ThemeType } from "../themes/MainTheme"
+import { useTheme } from "@react-navigation/native"
 
 type Type = {
     leftIcon?: React.ReactNode,
@@ -15,7 +17,11 @@ const CustomTextInput = (props: Type) => {
 
     const [ focus, setFocus ] = useState(false)
 
-    const styles = styling()
+    const theme = useTheme()
+
+    const styles = styling(theme)
+
+    const { colors } = theme
 
     const { control } = useFormContext()
 
@@ -28,7 +34,7 @@ const CustomTextInput = (props: Type) => {
             control={control}
             name={fieldName}
             render={({ field: { onChange, onBlur, value } }) => (
-                <View style={[styles.inputContainer, { borderColor: focus ? 'blue' : 'grey' }]}>
+                <View style={[styles.inputContainer, { borderColor: focus ? colors.primary : colors.text }]}>
                     {leftIcon}
                     <TextInput
                         style={styles.textInput}
@@ -46,7 +52,7 @@ const CustomTextInput = (props: Type) => {
     )
 }
 
-const styling = () => (
+const styling = (theme: ThemeType) => (
     StyleSheet.create({
         inputContainer: {
             display: 'flex',
@@ -54,7 +60,7 @@ const styling = () => (
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
-            borderColor: 'grey',
+            borderColor: theme.colors.text,
             borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 4,
@@ -66,7 +72,7 @@ const styling = () => (
             paddingVertical: 10,
             paddingRight: 10,
             paddingLeft: 0,
-            color: '#424242',
+            color: theme.colors.text,
             width: '100%'
         }
     })
